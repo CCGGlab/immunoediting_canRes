@@ -104,6 +104,7 @@ p<- plot_grid(
 
 # save plot
 ggsave("immunoediting_canRes/results/figs/fig1.pdf", p, width = 178, height = 265/3, units = "mm")
+ggsave("immunoediting_canRes/results/figs/fig1.png", p, width = 178, height = 265/3, units = "mm")
 
 # Save results
 save.image(file = "immunoediting_canRes/results/data/results.RData")

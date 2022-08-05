@@ -15,7 +15,7 @@ We used the *cales_t.R* method as available on https://github.com/wt12318/NeoEnr
 source("scripts/ES_rna_analysis")
 ```
 
-results/figs/fig1.pdf
+<img src="results/figs/fig1.png" style="zoom:75%;" />
 
 This randomly simulated mutation analysis shows that ES RNA is highly significant in both the complete (pan-cancer) dataset and for several individual cancer types. These results are strikingly similar to what Wu et al. report in fig. 2C and provides clear evidence that this result is unrelated to immunoediting (no immune selection signals are expected in randomly simulated mutation data)
 
