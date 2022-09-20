@@ -1,0 +1,10 @@
+channels:
+- conda-forge
+- bioconda
+dependencies:
+- r-essentials=4.0
+- bioconductor-fgsea
+- r-writexls
+- bioconductor-deseq2
+- r-ggpubr
+- r-ggprism

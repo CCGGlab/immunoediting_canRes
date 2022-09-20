@@ -2,6 +2,8 @@
 # Check ES_RNA approach on simulated somatic mutation data
 #############################################################################
 
+library(matrixStats)
+
 # 1) Load previously published simulated somatic mutation data
 ##############################################################
 
@@ -11,37 +13,40 @@ TCGA_maf_sim<- readRDS("../immunoediting_2019/data/TCGA_maf_sim.rds")
 # Only missense mutations
 TCGA_maf_sim<- TCGA_maf_sim[TCGA_maf_sim$Variant_Classification=="nonsynonymous SNV",]
 
+# Exclude samples with lacking expression data
+TCGA_maf_sim<- TCGA_maf_sim[!is.na(TCGA_maf_sim$mRNA),]
+
 # 2) Calculate ES
 ###################
 
-source("immunoediting_canRes/scripts/functions/cales.R")
-source("immunoediting_canRes/scripts/functions/cales_t.R")
+source("scripts/functions/cales.R")
+source("scripts/functions/cales_t.R")
 
 # Create mutation datatable as specified by readme in https://github.com/wt12318/NeoEnrichment/
 mut_dt<- data.frame(sample=TCGA_maf_sim$Tumor_Sample_Barcode, neo="not_neo", exp=TCGA_maf_sim$mRNA)
 mut_dt$neo[TCGA_maf_sim$mut_HLA_mean_aff<500]<- "neo" # Criterium to define neoantigen in Van den Eynden, 2019
 
-# Exclude samples with lacking expression data
-mut_dt<- mut_dt[!is.na(mut_dt$exp),]
-samples<- unique(mut_dt$sample)
-
 # Calculate ES RNA
 library(tidyverse)
+samples<- unique(mut_dt$sample)
 ES_rna<- lapply(samples, function(x) cales_t(data = mut_dt, barcode = x, calp = F, cal_type = "exp", type = "II", sample_counts = 1000))
 names(ES_rna)<- samples
 
-# Map cancer types to barcodes 
-samples_cancer<- TCGA_maf_sim$Cancer
-names(samples_cancer)<- TCGA_maf_sim$Tumor_Sample_Barcode
-samples_cancer<- samples_cancer[samples]
+# 3. Permutation test
+#####################
+saveRDS(mut_dt,file = "temp/mut_df.rds")
+# see scripts/ES_rna_perm.R
+
+# 4. Plot
+#########
 
 # Median ES per cancer
-ES_med<- sort(tapply(as.numeric(ES_rna), samples_cancer[names(ES_rna)], "median", na.rm=T))
+load("../immunoediting_2019/data/TCGA_manifest.RData")
+ES_med<- sort(tapply(as.numeric(ES_rna), TCGA_cancer_id[names(ES_rna),1], "median", na.rm=T))
 
 # Calculate p values from permutation data
-# see scripts/ES_rna_perm.R
-perm_matrix<- readRDS(file = "immunoediting_canRes/data/perm_matrix.rds")
-perm_matrix_cancer<- t(apply(perm_matrix, 1, function(x) tapply(x, samples_cancer[colnames(perm_matrix)], "median",na.rm=T)))
+perm_matrix<- readRDS(file = "temp/perm_matrix.rds")
+perm_matrix_cancer<- t(apply(perm_matrix, 1, function(x) tapply(x, TCGA_cancer_id[colnames(perm_matrix),1], "median",na.rm=T)))
 
 pval_can<- rep(NA, ncol(perm_matrix_cancer))
 names(pval_can)<- colnames(perm_matrix_cancer)
@@ -51,8 +56,8 @@ for(c in colnames(perm_matrix_cancer)){
 pval_pan<- mean(median(as.numeric(ES_rna),na.rm=T)>rowMedians(perm_matrix, na.rm=T))
 
 # plot
-samples_cancer<- factor(samples_cancer, levels=names(ES_med))
-es_df<- data.frame(es=as.numeric(ES_rna), cancer=samples_cancer[names(ES_rna)], sample=names(ES_rna))
+es_df<- data.frame(es=as.numeric(ES_rna), cancer=TCGA_cancer_id[names(ES_rna),1], sample=names(ES_rna))
+es_df$cancer<- factor(es_df$cancer, levels=names(ES_med))
 library(ggprism)
 psign_can<- rep("ns",length(pval_can))
 psign_can[pval_can<0.05]<- "*"
@@ -103,8 +108,9 @@ p<- plot_grid(
   align = "hv")
 
 # save plot
-ggsave("immunoediting_canRes/results/figs/fig1.pdf", p, width = 178, height = 265/3, units = "mm")
-ggsave("immunoediting_canRes/results/figs/fig1.png", p, width = 178, height = 265/3, units = "mm")
+saveRDS(p, file = "results/data/p_sim.rds")
+ggsave("results/figs/fig1b.pdf", p, width = 178, height = 265/3, units = "mm")
 
 # Save results
-save.image(file = "immunoediting_canRes/results/data/results.RData")
+##############
+save.image(file = "results/data/results.RData")

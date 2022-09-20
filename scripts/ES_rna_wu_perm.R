@@ -1,7 +1,6 @@
 #############################################################################
-# ES_RNA permutation 
+# ES_RNA_Wu permutation 
 #############################################################################
-
 
 library(tidyverse)
 library(parallel)
@@ -28,15 +27,15 @@ perm_es<- function(i){
     res<- append(res, ES_rna_perm)
   }
   # Save 
-  saveRDS(res, paste0("temp/sim/perm_",s,".rds"))
+  saveRDS(res, paste0("temp/wu/perm_",s,".rds"))
 }
 mclapply(1:length(samples), "perm_es", mc.cores = 50)
 
-# Merge permumtation data in matrix 
+# Merge permutation data in matrix 
 perm_matrix<- matrix(NA,2000,length(samples))
 colnames(perm_matrix)<- samples
-for(f in list.files("temp/", full.names = T)){
+for(f in list.files("temp/wu/", full.names = T)){
   s<- gsub(".*perm_|\\.rds","",f)
   perm_matrix[,s]<- as.numeric(readRDS(f))
 }
-saveRDS(perm_matrix, file = "temp/perm_matrix.rds")
+saveRDS(perm_matrix, file = "temp/perm_matrix_wu.rds")
