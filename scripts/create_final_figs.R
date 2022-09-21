@@ -23,7 +23,7 @@ p_sim<- readRDS("results/data/p_sim.rds")
 
 title_sim <- ggdraw() + 
   draw_label(
-    "Simulated somatic mutation data as reported in Van den Eynden et al., 2019",
+    "Random somatic mutation data as reported in Van den Eynden et al., 2019",
     fontface = 'bold',
     x = 0.5,
     hjust = 0.5,
@@ -37,7 +37,7 @@ p_gt<- readRDS("results/data/p_GTex.rds")
 
 title_gt <- ggdraw() + 
   draw_label(
-    "Random somatic mutations with expression data from GTeX",
+    "Random somatic mutations with expression data from GTEx",
     fontface = 'bold',
     x = 0.5,
     hjust = 0.5,
@@ -52,7 +52,7 @@ p<- plot_grid(
   labels = "AUTO")
 
 ggsave("results/figs/fig1.pdf", p, width = 178, height = 265, units = "mm")
-ggsave("results/figs/fig1.png", p, width = 178, height = 265, units = "mm")
+ggsave("results/figs/fig1.png", p, width = 178, height = 265, units = "mm", bg = "white")
 
 # Figure 2
 ###########
