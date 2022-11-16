@@ -84,13 +84,15 @@ plts <- list(
     summarise(predicted_neoantigens = mean(mhc1_bind)) %>%
     ggplot(aes(x = is_expressed, y = predicted_neoantigens)) +
     geom_col() +
-    scale_y_continuous(breaks = seq(0, 1, by = 0.05)) +
+    scale_y_continuous(breaks = seq(0, 1, by = 0.05), limits = c(0,0.35)) +
     # Add p-values (based on Fisher test) to the plot
     annotate(
       "text",
-      x = 0.5,
+      x = 1.5,
       y = 0.31,
-      hjust = 0,
+      hjust = 0.5,
+      vjust=1,
+      size=2,
       label = str_glue("p = {format(fisher_test_pvalues$expr$p.value, digits=3)}")
     ) +
     labs(x = "expressed"),
@@ -102,13 +104,16 @@ plts <- list(
     summarise(predicted_neoantigens = mean(mhc1_bind)) %>%
     ggplot(aes(x = OLFR, y = predicted_neoantigens)) +
     geom_col() +
+    scale_y_continuous(limits = c(0,0.55)) +
     # Add p-values (based on Fisher test) to the plot
     annotate(
       # geom_text(position = position_nudge(x = -1)),
       "text",
-      x = 0.5,
-      y = 0.5,
-      hjust = 0,
+      x = 1.5,
+      y = 0.55,
+      hjust = 0.5,
+      vjust=1,
+      size=2,
       label = str_glue("p = {format(fisher_test_pvalues$olfr$p.value, digits=3)}")
     ),
   
@@ -119,13 +124,16 @@ plts <- list(
     summarise(predicted_neoantigens = mean(mhc1_bind)) %>%
     ggplot(aes(x = GCR, y = predicted_neoantigens)) +
     geom_col() +
+    scale_y_continuous(limits = c(0,0.45)) +
     # Add p-values (based on Fisher test) to the plot
     annotate(
       # geom_text(position = position_nudge(x = -1)),
       "text",
-      x = 0.5,
-      y = 0.4,
-      hjust = 0,
+      x = 1.5,
+      y = 0.48,
+      hjust = 0.5,
+      vjust=1,
+      size=2,
       label = str_glue("p = {format(fisher_test_pvalues$gcr$p.value, digits=3)}")
     ),
   

@@ -51,6 +51,24 @@ p<- plot_grid(
   ncol = 1,
   labels = "AUTO")
 
+# Footer
+footer<- ggdraw() + 
+  draw_label(
+    "Supplementary Figure 1",
+    fontface = 'bold',
+    y = 0,
+    hjust = 0.5,
+    vjust = -1,
+    size = 10
+  ) 
+
+p<- plot_grid(
+  p, footer,
+  ncol = 1,
+  rel_heights = c(20,1)
+)
+
+
 ggsave("results/figs/fig1.pdf", p, width = 178, height = 265, units = "mm")
 ggsave("results/figs/fig1.png", p, width = 178, height = 265, units = "mm", bg = "white")
 
@@ -65,6 +83,7 @@ p_exp<- p_ls$expression +
   theme(
     axis.title = element_text(size = 7),
     axis.text = element_text(size = 6),
+    plot.margin = unit(c(1,0,0,1), "lines")
   )
   
 p_olfr<- p_ls$olfr +
@@ -73,6 +92,7 @@ p_olfr<- p_ls$olfr +
   theme(
     axis.title = element_text(size = 7),
     axis.text = element_text(size = 6),
+    plot.margin = unit(c(1,0,0,1), "lines")
   )
 
 p_gpcr<- p_ls$gcr +
@@ -81,6 +101,7 @@ p_gpcr<- p_ls$gcr +
   theme(
     axis.title = element_text(size = 7),
     axis.text = element_text(size = 6),
+    plot.margin = unit(c(1,0,0,1), "lines")
   )
 
 p_hp<- p_ls$hydrophobic +
@@ -89,6 +110,7 @@ p_hp<- p_ls$hydrophobic +
   theme(
     axis.title = element_text(size = 7),
     axis.text = element_text(size = 6),
+    plot.margin = unit(c(1,0,0,1), "lines")
   )
 
 p_GSEA<- readRDS("results/data/GSEA_top5_ggplot.rds")
@@ -102,13 +124,60 @@ p_aux1<- plot_grid(
 p_aux2<- plot_grid(
   p_GSEA+ggtitle(""), p_hp,
   ncol = 1,
-  labels = c("B","E"))
+  labels = c("B","E") )
 
 p<- plot_grid(
   p_aux1, p_aux2,
   ncol = 2,
-  rel_widths = c(1,3)
+  rel_widths = c(2.2,6)
 )
 
-ggsave("results/figs/fig2.pdf", p, width = 178, height = 265/2, units = "mm")
-ggsave("results/figs/fig2.png", p, width = 178, height = 265/2, units = "mm")
+# Footer
+footer<- ggdraw() + 
+  draw_label(
+    "Supplementary Figure 2",
+    fontface = 'bold',
+    y = 0,
+    hjust = 0.5,
+    vjust = -1,
+    size = 10
+  ) 
+
+p<- plot_grid(
+  p, NA, footer,
+  ncol = 1,
+  rel_heights = c(10,10,1)
+)
+
+ggsave("results/figs/fig2.pdf", p, width = 178, height = 265, units = "mm")
+ggsave("results/figs/fig2.png", p, width = 178, height = 265, units = "mm")
+
+# Figure 3
+##########
+
+p1<- readRDS("results/data/p_ccf.rds")
+p2<- readRDS("results/data/p_shuffle_ccf.rds")
+
+p<- plot_grid(
+  p1, p2,
+  ncol = 1
+)
+
+footer<- ggdraw() + 
+  draw_label(
+    "Supplementary Figure 3",
+    fontface = 'bold',
+    y = 0,
+    hjust = 0.5,
+    vjust = -1,
+    size = 10
+  ) 
+
+p<- plot_grid(
+  p, footer,
+  ncol = 1,
+  rel_heights = c(20,1)
+)
+
+ggsave("results/figs/fig3.pdf", p, width = 178, height = 265, units = "mm")
+ggsave("results/figs/fig3.png", p, width = 178, height = 265, units = "mm", bg = "white")

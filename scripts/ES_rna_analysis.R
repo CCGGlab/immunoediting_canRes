@@ -64,6 +64,7 @@ psign_can[pval_can<0.05]<- "*"
 psign_can[pval_can<0.01]<- "**"
 psign_can[pval_can<0.001]<- "***"
 pval_can_df<- data.frame(p=pval_can, sign=psign_can)
+pval_can_df<- pval_can_df[levels(es_df$cancer),]
 pval_can_df$x<- 1:nrow(pval_can_df)
 pval_can_df$y<- 1.1
 pval_can_df$size<- 3

@@ -3,6 +3,10 @@
 
 all_mut_exp <- readRDS("downloads/pub/wu_2022/Immunoediting/data/all_mut_tpm_not_filter.rds")
 
+# Poportion neoantigenic?
+neo_t<- table(all_mut_exp$neo)
+prop.table(neo_t)["neo"] # 0.159
+
 # 2) Calculate ES
 ###################
 
@@ -20,13 +24,14 @@ mut_dt<- data.frame(
 # Calculate ES RNA
 library(tidyverse)
 samples<- unique(mut_dt$sample)
-ES_rna<- lapply(samples, function(x) cales_t(data = mut_dt, barcode = x, calp = F, cal_type = "exp", type = "II", sample_counts = 1000))
+# ES_rna<- lapply(samples, function(x) cales_t(data = mut_dt, barcode = x, calp = F, cal_type = "exp", type = "II", sample_counts = 1000))
+ES_rna<- mclapply(samples, function(x) cales_t(data = mut_dt, barcode = x, calp = F, cal_type = "exp", type = "II", sample_counts = 1000),mc.cores = 10)
 summary(as.numeric(ES_rna)) # -0.041
 names(ES_rna)<- samples
 
 # 3. Permutation test
 #####################
-saveRDS(mut_dt,file = "temp/mut_df_wu.rds")
+# saveRDS(mut_dt,file = "temp/mut_df_wu.rds")
 # see scripts/ES_rna_wu_perm.R
 
 # 4. Plot
@@ -56,6 +61,7 @@ psign_can[pval_can<0.05]<- "*"
 psign_can[pval_can<0.01]<- "**"
 psign_can[pval_can<0.001]<- "***"
 pval_can_df<- data.frame(p=pval_can, sign=psign_can)
+pval_can_df<- pval_can_df[levels(es_df$cancer),]
 pval_can_df$x<- 1:nrow(pval_can_df)
 pval_can_df$y<- 1.1
 pval_can_df$size<- 3

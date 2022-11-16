@@ -115,7 +115,7 @@ source("scripts/functions/adapt_tbl_cols.R")
 # ==== Read and format results ====
 
 # Read results of Fisher-test based enrichment analysis
-gsea <- readRDS("data/GSEA_results.rds")
+gsea <- readRDS("results/data/GSEA_results.rds")
 
 # Filter results that are included in the table (top 5 lowest p-value)
 formatted_df <- gsea %>%
