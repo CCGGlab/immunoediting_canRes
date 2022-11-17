@@ -114,7 +114,7 @@ p_hp<- p_ls$hydrophobic +
   )
 
 p_GSEA<- readRDS("results/data/GSEA_top5_ggplot.rds")
-p_GSEA<- p_GSEA$simulated_tcga
+p_GSEA<- p_GSEA$gppm_rand
 
 p_aux1<- plot_grid(
   p_exp, p_gpcr, p_olfr,

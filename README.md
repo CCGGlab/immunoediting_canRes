@@ -56,7 +56,7 @@ source("scripts/create_gppm_rand")
 source("scripts/ES_rna_analysis_GTex.R")
 ```
 
-# Analysis of the correlation between neoantigenicity and gene expression in the absence of immunoediting (FIg. S2)
+# Analysis of the correlation between neoantigenicity and gene expression in the absence of immunoediting (Fig. S2)
 
 Random somatic mutation with expression data from GTEx (cf fig. S1C)
 
@@ -72,6 +72,22 @@ source("scripts/perform_GSEA.R")
 source("scripts/get_predicted_neoantigens.R")
 ```
 
+# ES_CCF Analysis (Fig. S3)
+
+We used the *cal_es_new_test.R* method as available on https://github.com/wt12318/NeoEnrichment/
+
+## Fig. S3A-D. Correlation analysis between TMB and A) ES CCFF, B) % predicted neoantigens, C) % included samples, D) randomly expected samples without predicted neoantigens 
+
+```{r}
+source("scripts/CCF_analysis.R")
+```
+
+## Fig. S3E-H. ES CCF and TMB correlations after randomly shuffling neoantigen labellings in the prefiltered data. 
+
+```{r}
+source("scripts/ES_CCF_random_shuffling_analysis.R")
+```
+
 # Merge all figure panels
 
 ```{r}
@@ -80,8 +96,8 @@ source("scripts/create_final_figs.R")
 
 # Conclusion
 
-<img src="results/figs/fig1.png" style="zoom:75%;" />
+<img src="results/figs/fig_summary.png" style="zoom:75%;" />
 
-ES RNA is highly similar between the TCGA data reported by Wu et al and 2 independent *in silico* generated random somatic mutation datasets, providing clear evidence that the ES RNA results reported by Wu et al (Fig. 2C) are unrelated to immunoediting (no immune selection signals are expected in randomly simulated mutation data).
+Both the reported ES RNA and ES CCF results are not related to immunoediting but rather caused by a gene expression and a filtering bias, respectively. 
 
 
